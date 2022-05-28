@@ -1,6 +1,10 @@
 package br.com.dio.desafio.dominio;
 
-import java.util.*;
+import java.util.Iterator;
+import java.util.LinkedHashSet;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.Set;
 
 public class Dev {
     private String nome;
@@ -11,6 +15,10 @@ public class Dev {
         this.conteudosInscritos.addAll(bootcamp.getConteudos());
         bootcamp.getDevsInscritos().add(this);
     }
+    
+    public void mostrarAtividades() {
+    	System.out.println("Seus conteúdos concluídos: " + this.conteudosConcluidos + "\nContinue de onde parou: " + this.conteudosInscritos); 
+    }
 
     public void progredir() {
         Optional<Conteudo> conteudo = this.conteudosInscritos.stream().findFirst();
@@ -18,8 +26,23 @@ public class Dev {
             this.conteudosConcluidos.add(conteudo.get());
             this.conteudosInscritos.remove(conteudo.get());
         } else {
-            System.err.println("VocÃª nÃ£o estÃ¡ matriculado em nenhum conteÃºdo!");
+            System.err.println("Você não está matriculado em nenhum conteúdo!");
         }
+    }
+    
+    public void emitirCertificado(Bootcamp bootcamp) {
+    	if (conteudosInscritos.isEmpty()) {
+    		System.out.println("Parabéns! Você concluiu o bootcamp. Baixe seu certificado.");
+    	} else {
+    		System.out.println("Estamos orgulhosos de que você esteja focado nesse novo desafio da sua carreira. Ainda faltam atividades para completar o bootcamp. Volte aqui quando terminar a sua jornada.");
+    	}
+    }
+    
+    public void cancelarMatricula() {
+    	Optional<Conteudo> conteudo = this.conteudosInscritos.stream().findFirst();
+    	while(conteudo.isPresent()) {
+    		this.conteudosInscritos.remove(conteudo.get());
+    	}
     }
 
     public double calcularTotalXp() {
